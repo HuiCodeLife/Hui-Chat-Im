@@ -17,6 +17,13 @@
 
     <dependencies>
 
+        <!-- 滑块验证码  -->
+        <dependency>
+            <groupId>com.github.anji-plus</groupId>
+            <artifactId>captcha-spring-boot-starter</artifactId>
+            <version>1.2.7</version>
+        </dependency>
+
         <!-- SpringBoot Web容器 -->
          <dependency>
             <groupId>org.springframework.boot</groupId>

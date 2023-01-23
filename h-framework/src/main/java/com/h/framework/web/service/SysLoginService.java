@@ -1,7 +1,12 @@
 package com.h.framework.web.service;
 
 import javax.annotation.Resource;
+
+import com.anji.captcha.model.common.ResponseModel;
+import com.anji.captcha.model.vo.CaptchaVO;
+import com.anji.captcha.service.CaptchaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +34,7 @@ import com.h.system.service.ISysUserService;
 
 /**
  * 登录校验方法
- * 
+ *
  * @author ruoyi
  */
 @Component
@@ -43,29 +48,36 @@ public class SysLoginService
 
     @Autowired
     private RedisCache redisCache;
-    
+
     @Autowired
     private ISysUserService userService;
 
     @Autowired
     private ISysConfigService configService;
 
+
+    @Autowired
+    @Lazy
+    private CaptchaService captchaService;
+
     /**
      * 登录验证
-     * 
+     *
      * @param username 用户名
      * @param password 密码
      * @param code 验证码
      * @param uuid 唯一标识
      * @return 结果
      */
-    public String login(String username, String password, String code, String uuid)
+    public String login(String username, String password, String code)
     {
-        boolean captchaEnabled = configService.selectCaptchaEnabled();
-        // 验证码开关
-        if (captchaEnabled)
+        CaptchaVO captchaVO = new CaptchaVO();
+        captchaVO.setCaptchaVerification(code);
+        ResponseModel response = captchaService.verification(captchaVO);
+        if (!response.isSuccess())
         {
-            validateCaptcha(username, code, uuid);
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.error")));
+            throw new CaptchaException();
         }
         // 用户验证
         Authentication authentication = null;
@@ -102,7 +114,7 @@ public class SysLoginService
 
     /**
      * 校验验证码
-     * 
+     *
      * @param username 用户名
      * @param code 验证码
      * @param uuid 唯一标识
