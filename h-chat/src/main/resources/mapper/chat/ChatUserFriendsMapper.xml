@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.h.chat.mapper.ChatUserFriendsMapper">
+
+    <delete id="deleteFriendsRef">
+        DELETE
+        FROM
+            chat_user_friends
+        WHERE
+            (
+            user_id = #{userId}
+            AND friend_id = #{friendId}
+         OR user_id = #{friendId}
+            AND friend_id = #{userId})
+    </delete>
+
+</mapper>

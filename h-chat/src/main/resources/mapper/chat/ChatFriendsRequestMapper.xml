@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.h.chat.mapper.ChatFriendsRequestMapper">
+    
+    <resultMap type="ChatFriendsRequest" id="ChatFriendsRequestResult">
+        <result property="id"    column="id"    />
+        <result property="sendUserId"    column="send_user_id"    />
+        <result property="acceptUserId"    column="accept_user_id"    />
+        <result property="requestDateTime"    column="request_date_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectChatFriendsRequestVo">
+        select id, send_user_id, accept_user_id, request_date_time, del_flag, status from chat_friends_request
+    </sql>
+
+    <select id="selectChatFriendsRequestList" parameterType="ChatFriendsRequest" resultMap="ChatFriendsRequestResult">
+        <include refid="selectChatFriendsRequestVo"/>
+        <where>  
+            <if test="sendUserId != null "> and send_user_id = #{sendUserId}</if>
+            <if test="acceptUserId != null "> and accept_user_id = #{acceptUserId}</if>
+            <if test="requestDateTime != null "> and request_date_time = #{requestDateTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectChatFriendsRequestById" parameterType="Long" resultMap="ChatFriendsRequestResult">
+        <include refid="selectChatFriendsRequestVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertChatFriendsRequest" parameterType="ChatFriendsRequest">
+        insert into chat_friends_request
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="sendUserId != null">send_user_id,</if>
+            <if test="acceptUserId != null">accept_user_id,</if>
+            <if test="requestDateTime != null">request_date_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="sendUserId != null">#{sendUserId},</if>
+            <if test="acceptUserId != null">#{acceptUserId},</if>
+            <if test="requestDateTime != null">#{requestDateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateChatFriendsRequest" parameterType="ChatFriendsRequest">
+        update chat_friends_request
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sendUserId != null">send_user_id = #{sendUserId},</if>
+            <if test="acceptUserId != null">accept_user_id = #{acceptUserId},</if>
+            <if test="requestDateTime != null">request_date_time = #{requestDateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteChatFriendsRequestById" parameterType="Long">
+        delete from chat_friends_request where id = #{id}
+    </delete>
+
+    <delete id="deleteChatFriendsRequestByIds" parameterType="String">
+        delete from chat_friends_request where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

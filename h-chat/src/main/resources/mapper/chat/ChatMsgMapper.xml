@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.h.chat.mapper.ChatMsgMapper">
+
+    <resultMap type="ChatMsg" id="ChatMsgResult">
+        <result property="id"    column="id"    />
+        <result property="sendUserId"    column="send_user_id"    />
+        <result property="acceptUserId"    column="accept_user_id"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectChatMsgVo">
+        select id, send_user_id, accept_user_id, content, create_time from chat_msg
+    </sql>
+
+    <select id="selectChatMsgList" parameterType="ChatMsg" resultMap="ChatMsgResult">
+        <include refid="selectChatMsgVo"/>
+        <where>
+            <if test="sendUserId != null "> and send_user_id = #{sendUserId}</if>
+            <if test="acceptUserId != null "> and accept_user_id = #{acceptUserId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+
+
+    </select>
+
+    <select id="selectChatMsgById" parameterType="Long" resultMap="ChatMsgResult">
+        <include refid="selectChatMsgVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertChatMsg" parameterType="ChatMsg" useGeneratedKeys="true" keyProperty="id">
+        insert into chat_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sendUserId != null">send_user_id,</if>
+            <if test="acceptUserId != null">accept_user_id,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sendUserId != null">#{sendUserId},</if>
+            <if test="acceptUserId != null">#{acceptUserId},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateChatMsg" parameterType="ChatMsg">
+        update chat_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sendUserId != null">send_user_id = #{sendUserId},</if>
+            <if test="acceptUserId != null">accept_user_id = #{acceptUserId},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteChatMsgById" parameterType="Long">
+        delete from chat_msg where id = #{id}
+    </delete>
+
+    <delete id="deleteChatMsgByIds" parameterType="String">
+        delete from chat_msg where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
