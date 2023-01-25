@@ -153,3 +153,10 @@ aj:
     aes-status: true
     # 滑动干扰项(0/1/2)
     interference-options: 2
+
+# Minio配置
+minio:
+  url: http://192.168.200.131:9001
+  accessKey: uHxZ04yzdbCGSayh
+  secretKey: g6So1L6pwFMqCW0iuU50lyyQ92shzqqs
+  bucketName: chat

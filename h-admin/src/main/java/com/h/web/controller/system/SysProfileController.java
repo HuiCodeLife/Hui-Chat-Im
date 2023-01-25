@@ -1,5 +1,6 @@
 package com.h.web.controller.system;
 
+import com.h.common.utils.file.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +20,13 @@ import com.h.common.core.domain.model.LoginUser;
 import com.h.common.enums.BusinessType;
 import com.h.common.utils.SecurityUtils;
 import com.h.common.utils.StringUtils;
-import com.h.common.utils.file.FileUploadUtils;
 import com.h.common.utils.file.MimeTypeUtils;
 import com.h.framework.web.service.TokenService;
 import com.h.system.service.ISysUserService;
 
 /**
  * 个人信息 业务处理
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -128,7 +128,8 @@ public class SysProfileController extends BaseController
         if (!file.isEmpty())
         {
             LoginUser loginUser = getLoginUser();
-            String avatar = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+//            String avatar = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+            String avatar = FileUploadUtils.uploadMinio(file);
             if (userService.updateUserAvatar(loginUser.getUsername(), avatar))
             {
                 AjaxResult ajax = AjaxResult.success();

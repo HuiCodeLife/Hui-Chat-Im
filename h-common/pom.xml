@@ -17,6 +17,12 @@
 
     <dependencies>
 
+        <!-- Minio 文件存储 -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.2.1</version>
+        </dependency>
 
         <!-- mybatis-plus 增强CRUD -->
         <dependency>

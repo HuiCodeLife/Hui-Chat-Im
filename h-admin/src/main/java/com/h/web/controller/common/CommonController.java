@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.h.common.annotation.Anonymous;
+import com.h.common.utils.file.FileUploadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +20,12 @@ import com.h.common.config.RuoYiConfig;
 import com.h.common.constant.Constants;
 import com.h.common.core.domain.AjaxResult;
 import com.h.common.utils.StringUtils;
-import com.h.common.utils.file.FileUploadUtils;
 import com.h.common.utils.file.FileUtils;
 import com.h.framework.config.ServerConfig;
 
 /**
  * 通用请求处理
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -37,9 +39,35 @@ public class CommonController
 
     private static final String FILE_DELIMETER = ",";
 
+
+
+
+    /**
+     * 自定义 Minio 服务器上传请求
+     */
+    @PostMapping("/uploadMinio")
+    public AjaxResult uploadFileMinio(MultipartFile file) throws Exception
+    {
+        try
+        {
+            // 上传并返回新文件名称
+            String fileName = FileUploadUtils.uploadMinio(file);
+            AjaxResult ajax = AjaxResult.success();
+            ajax.put("url", fileName);
+            ajax.put("fileName", fileName);
+            ajax.put("newFileName", FileUtils.getName(fileName));
+            ajax.put("originalFilename", file.getOriginalFilename());
+            return ajax;
+        }
+        catch (Exception e)
+        {
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
     /**
      * 通用下载请求
-     * 
+     *
      * @param fileName 文件名称
      * @param delete 是否删除
      */
