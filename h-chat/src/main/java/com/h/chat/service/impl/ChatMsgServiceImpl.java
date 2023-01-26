@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 /**
  * @Author: Lin
- * @create: 2022-12-16
  */
 @Service
 public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgMapper, ChatMsg> implements ChatMsgService {

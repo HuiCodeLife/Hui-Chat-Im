@@ -14,9 +14,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 图灵机器人工具类
+ *
  * @author Lin
  */
 public class RobotUtil {
+  /**
+   * 获取机器人消息
+   * @param chatMsgDto 消息内容对象
+   * @param user 用户信息
+   * @return 机器人返回结果
+   */
   public static String getRobotMsg(ChatMsgDto chatMsgDto, SysUser user)  {
     PostData postData = new PostData();
     postData.setReqType(0);

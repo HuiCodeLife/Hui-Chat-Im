@@ -22,6 +22,10 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import java.util.Objects;
 
 
+/**
+ * websocket相关配置
+ * @author Lin
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -47,7 +51,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
       @Override
       public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-
         //判断是否未连接
         if(StompCommand.CONNECT.equals(accessor.getCommand())){
           //获取token  解析token

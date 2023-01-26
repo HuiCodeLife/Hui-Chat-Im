@@ -84,17 +84,6 @@ public class ChatFriendsRequestController extends BaseController
     }
 
     /**
-     * 修改好友请求
-     */
-//    @PreAuthorize("@ss.hasPermi('chat:request:edit')")
-//    @Log(title = "好友请求", businessType = BusinessType.UPDATE)
-//    @PutMapping
-//    public AjaxResult edit(@RequestBody ChatFriendsRequest chatFriendsRequest)
-//    {
-//        return toAjax(chatFriendsRequestService.updateChatFriendsRequest(chatFriendsRequest));
-//    }
-
-    /**
      * 删除好友请求
      */
     @PreAuthorize("@ss.hasPermi('chat:request:remove')")

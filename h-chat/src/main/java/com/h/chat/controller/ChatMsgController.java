@@ -70,27 +70,6 @@ public class ChatMsgController extends BaseController
         return success(chatMsgService.selectChatMsgById(id));
     }
 
-    /**
-     * 新增聊天记录
-     */
-    @PreAuthorize("@ss.hasPermi('chat:msg:add')")
-    @Log(title = "聊天记录", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody ChatMsg chatMsg)
-    {
-        return toAjax(chatMsgService.insertChatMsg(chatMsg));
-    }
-
-    /**
-     * 修改聊天记录
-     */
-    @PreAuthorize("@ss.hasPermi('chat:msg:edit')")
-    @Log(title = "聊天记录", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody ChatMsg chatMsg)
-    {
-        return toAjax(chatMsgService.updateChatMsg(chatMsg));
-    }
 
     /**
      * 删除聊天记录

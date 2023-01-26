@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
  * 好友请求Service业务层处理
  *
  * @author h
- * @date 2023-01-21
  */
 @Service
 public class ChatFriendsRequestServiceImpl extends ServiceImpl<ChatFriendsRequestMapper, ChatFriendsRequest> implements IChatFriendsRequestService

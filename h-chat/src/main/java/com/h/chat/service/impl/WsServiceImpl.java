@@ -4,7 +4,6 @@ package com.h.chat.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
-import com.h.chat.config.Constants;
 import com.h.chat.domain.ChatMsg;
 import com.h.chat.domain.ChatMsgDto;
 import com.h.chat.domain.MsgResult;
@@ -13,6 +12,7 @@ import com.h.chat.service.ChatMsgService;
 import com.h.chat.service.ChatUserFriendsService;
 import com.h.chat.service.WsService;
 import com.h.chat.utils.RobotUtil;
+import com.h.common.constant.Constants;
 import com.h.common.core.domain.AjaxResult;
 import com.h.common.core.domain.entity.SysUser;
 import com.h.common.core.domain.model.LoginUser;
@@ -33,7 +33,6 @@ import java.util.List;
 
 /**
  * @author: Lin
- * @since: 2023-01-11
  */
 @Service
 @Slf4j

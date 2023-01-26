@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * @Author: Lin
- * @create: 2022-12-30
  */
 @Service
 public class ChatUserFriendsServiceImpl extends ServiceImpl<ChatUserFriendsMapper, ChatUserFriends> implements ChatUserFriendsService {

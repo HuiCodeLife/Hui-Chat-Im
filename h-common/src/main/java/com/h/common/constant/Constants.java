@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 
 /**
  * 通用常量信息
- * 
+ *
  * @author ruoyi
  */
 public class Constants
@@ -63,7 +63,7 @@ public class Constants
      * 登录失败
      */
     public static final String LOGIN_FAIL = "Error";
- 
+
     /**
      * 验证码有效期（分钟）
      */
@@ -139,4 +139,10 @@ public class Constants
      */
     public static final String[] JOB_ERROR_STR = { "java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
             "org.springframework", "org.apache", "com.h.common.utils.file", "com.h.common.config" };
+
+    /**
+     * 未读消息
+     */
+    public static final String REDIS_UNREAD_MSG_PREFIX = "unread_msg";
+
 }

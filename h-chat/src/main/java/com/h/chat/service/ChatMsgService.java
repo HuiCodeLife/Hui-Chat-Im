@@ -7,6 +7,7 @@ import com.h.chat.domain.ChatMsg;
 import java.util.List;
 
 /**
+ * 聊天记录Service接口
  * @Author: Lin
  * @create: 2022-12-16
  */

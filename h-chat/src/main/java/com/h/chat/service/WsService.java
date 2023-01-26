@@ -5,9 +5,10 @@ import com.h.common.core.domain.AjaxResult;
 import org.springframework.security.core.Authentication;
 
 /**
- * 聊天相关服务类
+ * 聊天相关Service接口
+ *
  * @author: Lin
- * @since: 2023-01-11
+ * @date: 2023-01-11
  */
 public interface WsService {
 

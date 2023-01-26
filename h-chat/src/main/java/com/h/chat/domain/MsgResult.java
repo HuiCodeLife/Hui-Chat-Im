@@ -2,7 +2,7 @@ package com.h.chat.domain;
 
 import java.util.HashMap;
 /**
- * 自定义消息返回格式
+ * 简单自定义消息返回格式
  * @author: Lin
  * @since: 2023-01-11
  */

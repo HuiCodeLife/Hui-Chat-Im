@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.h.chat.domain.ChatUserFriends;
 
 /**
+ * 好友相关Service接口
+ *
  * @Author: Lin
  * @create: 2022-12-30
  */

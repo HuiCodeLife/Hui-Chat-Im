@@ -59,6 +59,7 @@ public class SysUser extends BaseEntity
     @JsonIgnore
     private String password;
 
+
     /** 帐号状态（0正常 1停用） */
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
     private String status;
