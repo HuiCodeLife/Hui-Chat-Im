@@ -52,11 +52,12 @@ public class SysUser extends BaseEntity
     @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
     private String sex;
 
+    /**  地区  */
+    private String area;
     /** 用户头像 */
     private String avatar;
 
     /** 密码 */
-    @JsonIgnore
     private String password;
 
 
@@ -300,6 +301,14 @@ public class SysUser extends BaseEntity
     public void setRoleId(Long roleId)
     {
         this.roleId = roleId;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     @Override

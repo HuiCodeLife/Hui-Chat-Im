@@ -49,11 +49,6 @@
             <artifactId>h-framework</artifactId>
         </dependency>
 
-        <!-- 定时任务-->
-        <dependency>
-            <groupId>com.h</groupId>
-            <artifactId>h-quartz</artifactId>
-        </dependency>
 
         <!-- 代码生成-->
         <dependency>
