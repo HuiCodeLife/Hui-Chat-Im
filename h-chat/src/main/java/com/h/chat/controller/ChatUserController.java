@@ -48,8 +48,6 @@ public class ChatUserController extends BaseController
         return AjaxResult.success(data);
     }
 
-
-
     /**
      * 根据用户名查找用户
      * @param username
@@ -77,19 +75,6 @@ public class ChatUserController extends BaseController
         chatUserFriendsService.deleteUserFriendsRef(userId,friendId);
         return AjaxResult.success();
     }
-
-//
-//    /**
-//     * 获取用户列表
-//     */
-//    @PreAuthorize("@ss.hasPermi('system:user:list')")
-//    @GetMapping("/list/common")
-//    public TableDataInfo list(SysUser user)
-//    {
-//        startPage();
-//        List<SysUser> list = userService.selectUserListCommon(user);
-//        return getDataTable(list);
-//    }
 
 
 

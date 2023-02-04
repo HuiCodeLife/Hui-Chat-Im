@@ -52,17 +52,6 @@
           v-hasPermi="['chat:request:add']"
         >新增</el-button>
       </el-col>
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="success"-->
-<!--          plain-->
-<!--          icon="el-icon-edit"-->
-<!--          size="mini"-->
-<!--          :disabled="single"-->
-<!--          @click="handleUpdate"-->
-<!--          v-hasPermi="['chat:request:edit']"-->
-<!--        >修改</el-button>-->
-<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -104,13 +93,6 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-edit"-->
-<!--            @click="handleUpdate(scope.row)"-->
-<!--            v-hasPermi="['chat:request:edit']"-->
-<!--          >修改</el-button>-->
           <el-button
             size="mini"
             type="text"
@@ -147,9 +129,9 @@
             placeholder="请选择发送时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="删除状态" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除状态" />
-        </el-form-item>
+<!--        <el-form-item label="删除状态" prop="delFlag">-->
+<!--          <el-input v-model="form.delFlag" placeholder="请输入删除状态" />-->
+<!--        </el-form-item>-->
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio

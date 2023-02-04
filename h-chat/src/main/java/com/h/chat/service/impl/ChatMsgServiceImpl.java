@@ -42,7 +42,6 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgMapper, ChatMsg> impl
     public List<ChatMsg> selectChatMsgList(ChatMsg chatMsg)
     {
         List<ChatMsg> chatMsgs = chatMsgMapper.selectChatMsgList(chatMsg);
-
         return chatMsgs;
     }
 
