@@ -56,8 +56,9 @@
 <script>
 import store from "@/store";
 import { VueCropper } from "vue-cropper";
-import { uploadAvatar } from "@/api/system/user";
+import { uploadAvatar } from "@/api/user";
 import { debounce } from '@/utils'
+import {Message} from "element-ui";
 
 export default {
   components: { VueCropper },
@@ -75,7 +76,7 @@ export default {
       // 弹出层标题
       title: "修改头像",
       options: {
-        img: store.getters.avatar, //裁剪图片的地址
+        img: store.state.user.avatar, //裁剪图片的地址
         autoCrop: true, // 是否默认生成截图框
         autoCropWidth: 200, // 默认生成截图框宽度
         autoCropHeight: 200, // 默认生成截图框高度
@@ -124,7 +125,7 @@ export default {
     // 上传预处理
     beforeUpload(file) {
       if (file.type.indexOf("image/") == -1) {
-        this.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。");
+        Message({ message: '文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。', type: 'error' })
       } else {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -142,7 +143,7 @@ export default {
           this.open = false;
           this.options.img = response.imgUrl;
           store.commit('SET_AVATAR', this.options.img);
-          this.$modal.msgSuccess("修改成功");
+          Message({ message: '修改成功', type: 'success' })
           this.visible = false;
         });
       });
@@ -184,9 +185,4 @@ export default {
   line-height: 110px;
   border-radius: 50%;
 }
-
-.img-circle {
-  border-radius: 50%;
-}
-
 </style>

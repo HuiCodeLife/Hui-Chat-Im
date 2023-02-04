@@ -21,6 +21,7 @@
                 昵称:&nbsp;&nbsp;{{ user.nickName }}
               </div>
               <div style="color: #9e9e9e">地区:&nbsp;{{ user.area }}</div>
+              <div> <el-button @click="showEditDialog" type="success" icon="el-icon-edit" circle></el-button></div>
             </div>
           </div>
         </header>
@@ -56,21 +57,79 @@
         </keep-alive>
       </div>
     </div>
+    <el-dialog  title="用户信息" :visible.sync="open"  width="1000px"    append-to-body>
+      <el-row :gutter="20">
+        <el-col :span="6" :xs="24">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>个人信息</span>
+            </div>
+            <div>
+              <div class="text-center">
+                <userAvatar :user="user" />
+              </div>
+              <ul class="list-group list-group-striped">
+                <li class="list-group-item">
+                  <div class="pull-right">{{ user.userName }}</div>
+                </li>
+                <li class="list-group-item">
+                  <div class="pull-right">{{ user.phonenumber }}</div>
+                </li>
+                <li class="list-group-item">
+                  <div class="pull-right">{{ user.email }}</div>
+                </li>
+
+                <li class="list-group-item">
+                  <div class="pull-right">{{ user.createTime }}</div>
+                </li>
+              </ul>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="18" :xs="24">
+          <el-card>
+            <div slot="header" class="clearfix">
+              <span>基本资料</span>
+            </div>
+            <el-tabs v-model="activeTab">
+              <el-tab-pane label="基本资料" name="userinfo">
+                <userInfo @closeDialog="closeDialog" :user="user" />
+              </el-tab-pane>
+              <el-tab-pane label="修改密码" name="resetPwd">
+                <resetPwd  @closeDialog="closeDialog" />
+              </el-tab-pane>
+            </el-tabs>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-dialog>
+
+
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from "vuex";
 
-import { logout } from "../api/login";
+import { logout } from "@/api/login";
 import { removeToken } from "@/utils/auth";
 import { getFriends } from "@/api/user";
 
+import userAvatar from "./user/userAvatar";
+import userInfo from "./user/userInfo";
+import resetPwd from "./user/resetPwd";
+import { getUserProfile } from "@/api/user";
+
 export default {
+  components: { userAvatar, userInfo, resetPwd },
   name: "Layout",
   data() {
     return {
+      userInfo: {},
       isShowUserInfo: false,
+      open: false,
+      activeTab: "userinfo"
+
     };
   },
   async created() {
@@ -85,6 +144,11 @@ export default {
   },
   methods: {
     ...mapMutations(["LOAD_RECENT_FRIENDS", "SET_FRIENDS"]),
+    getUser() {
+      getUserProfile().then(response => {
+        this.userInfo = response.data;
+      });
+    },
     // 登出
     logout() {
       this.$confirm("是否退出当前用户?", "提示", {
@@ -103,6 +167,13 @@ export default {
           });
         })
         .catch(() => {});
+    },
+    closeDialog(){
+      this.open = false;
+    },
+    showEditDialog(){
+      this.getUser();
+      this.open = true;
     },
     showUserInfo() {
       this.isShowUserInfo = true;
@@ -128,7 +199,7 @@ export default {
 .userInfo {
   position: absolute;
   width: 259px;
-  height: 116px;
+  height: 140px;
   padding: 17px;
   box-sizing: border-box;
   background-color: #fff;

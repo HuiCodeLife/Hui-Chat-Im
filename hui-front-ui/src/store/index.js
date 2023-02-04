@@ -168,7 +168,6 @@ const actions = {
                     });
                 }
             });
-
             state.stomp = Stomp.over(new SockJS("http://localhost:8080/ws/ep"));
             state.stomp.connect({Authorization: state.token}, () => {
                 // 订阅私人聊天消息
@@ -202,6 +201,9 @@ const actions = {
     },
 };
 const mutations = {
+    SET_AVATAR: (state, avatar) => {
+        state.user.avatar = avatar
+    },
     SET_TOKEN: (state, token) => {
         state.token = token;
     },

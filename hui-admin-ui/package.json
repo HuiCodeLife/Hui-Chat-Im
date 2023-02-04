@@ -31,10 +31,6 @@
     "admin-template",
     "management-system"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://gitee.com/y_project/RuoYi-Vue.git"
-  },
   "dependencies": {
     "@riophae/vue-treeselect": "0.4.0",
     "axios": "0.24.0",
