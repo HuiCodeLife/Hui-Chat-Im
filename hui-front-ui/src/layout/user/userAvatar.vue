@@ -87,6 +87,8 @@ export default {
       resizeHandler: null
     };
   },
+  computed:{
+  },
   methods: {
     // 编辑头像
     editCropper() {
@@ -142,9 +144,10 @@ export default {
         uploadAvatar(formData).then(response => {
           this.open = false;
           this.options.img = response.imgUrl;
-          store.commit('SET_AVATAR', this.options.img);
+          store.commit("SET_AVATAR",this.options.img);
           Message({ message: '修改成功', type: 'success' })
           this.visible = false;
+          // this.$emit('closeDialog')
         });
       });
     },
@@ -154,7 +157,7 @@ export default {
     },
     // 关闭窗口
     closeDialog() {
-      this.options.img = store.getters.avatar
+      this.options.img = store.state.user.avatar
       this.visible = false;
       window.removeEventListener("resize", this.resizeHandler)
     }

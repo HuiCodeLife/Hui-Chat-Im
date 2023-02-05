@@ -88,12 +88,8 @@
                 <div class="msg">
                   <div class="text">
                     <span v-html="replaceEmoji(msg.msg)"></span>
-                    <!--                      <image-preview src="http://localhost:8080/profile/upload/2023/01/26/Snipaste_2023-01-10_20-44-33_20230126142134A008.jpg"></image-preview>-->
-                    <!--                    {{msg.msg}}-->
                   </div>
-
                 </div>
-
               </div>
             </li>
           </ul>
@@ -177,19 +173,23 @@ export default {
   },
   methods: {
     ...mapMutations(["ADD_RECENT_FRIEND", "REMOVE_RECENT_FRIEND"]),
+    //点击更多
     handleMore() {
       Message({message: "该功能尚未实现", type: "info"});
     },
     showHandle(value) {
       this.isShow = value;
     },
+    //获取最后一条消息时间
     getLastTime(f) {
       const time = f.messages[f.messages.length - 1]?.time;
       return time ? this.getTime(time) : "";
     },
+    //获取最后一条消息
     getLastMsg(f) {
       return f.messages[f.messages.length - 1]?.msg;
     },
+    //获取时间
     getTime(time) {
       if (dayjs(time).format("YYYY-MM-DD") === dayjs(new Date()).format("YYYY-MM-DD")) {
         return dayjs(time).format("HH:mm");
@@ -198,6 +198,7 @@ export default {
 
       }
     },
+    //发送消息
     handleSendMsg() {
       // 不允许发送空数据
       if (this.msg.trim().length === 0) {
@@ -240,20 +241,25 @@ export default {
           JSON.stringify(this.recentFriends)
       );
     },
+    //点击好友聊天窗口
     handleClickFriend(index) {
       this.selectIndex = index;
       //选中聊天对象时刷新窗口至底部
       this.$nextTick(() => {
         this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
       });
+      //切换聊天窗口 清空聊天框
+      this.msg = ""
     },
     // 搜索功能
     handleSearch(v) {
       this.searchValue = v;
     },
+    // 清空搜索框
     handleClear() {
       this.searchValue = "";
     },
+    //替换为gif表情
     replaceEmoji(content) {
       if (content.includes("[")) {
         this.emojis.forEach((e) => {
@@ -267,6 +273,7 @@ export default {
       }
       return content;
     },
+    // 选中表情替换为[微笑]格式显示到文本框
     handleEmojiToContent(code) {
       let emoji = this.emojis.find((e) => {
         return e.code === code;
@@ -277,8 +284,8 @@ export default {
       this.msg += "[" + emoji.title + "]";
       this.isShow = false;
     },
-    handleSuccess(response, file, fileList) {
-      console.log(response.url, file, fileList)
+    //图片发送成功回调函数
+    handleSuccess(response) {
       let img = `<img   width="300px"  src="${response.url}"/>`
       // 判断是否选择聊天对象
       if (!this.currentChatFriend) {
@@ -316,6 +323,7 @@ export default {
       });
 
     },
+    //图片上传之前钩子函数
     beforeUpload(file) {
       //限制类型
       const fileName = file.name;   //取文件名字
@@ -324,24 +332,17 @@ export default {
       if (fileType === ".jpg" || fileType === ".png" || fileType === ".jpeg") {
         // 不处理
       } else {
-        // this.$message.error(
-        //   '请上传正确的格式的图片'
-        // )
         Message({message: "文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件", type: "error"});
-
         return false;
       }
-
       //限制大小.
       if (file.size / 1024 / 1024 > 5) {
         Message({message: "上传图片过大，请重新上传！", type: "error"});
         return false;
       }
-
     },
-
+    // 删除当前好友聊天会话框
     handleCloseSession(friend) {
-
       this.$confirm(`删除后，将清空该聊天的聊天记录`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -353,10 +354,7 @@ export default {
           })
           .catch(() => {
           });
-
     }
-
-
   },
   computed: {
     ...mapState(["token", "recentFriends", "user", "friendList", "emojis"]),
@@ -380,9 +378,11 @@ export default {
       },
     },
   },
+  //组件激活时触发
   activated() {
     this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
   },
+  //组件销毁时触发
   beforeDestroy() {
     if (this.timer) {
       clearInterval(this.timer);

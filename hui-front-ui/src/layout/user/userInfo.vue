@@ -9,6 +9,9 @@
     <el-form-item label="邮箱" prop="email">
       <el-input v-model="user.email" maxlength="50" />
     </el-form-item>
+    <el-form-item label="地区" prop="area">
+      <el-input v-model="user.area" maxlength="50" />
+    </el-form-item>
     <el-form-item label="性别">
       <el-radio-group v-model="user.sex">
         <el-radio label="0">男</el-radio>
@@ -38,6 +41,9 @@ export default {
       rules: {
         nickName: [
           { required: true, message: "用户昵称不能为空", trigger: "blur" }
+        ],
+        area: [
+          { required: true, message: "地区不能为空", trigger: "blur" }
         ],
         email: [
           { required: true, message: "邮箱地址不能为空", trigger: "blur" },

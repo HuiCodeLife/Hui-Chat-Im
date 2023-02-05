@@ -233,9 +233,6 @@
             />
           </template>
           <template slot-scope="scope">
-            <!-- <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">查看</el-button> -->
             <el-button
               size="mini"
               type="danger"
@@ -289,7 +286,6 @@ export default {
     ...mapMutations(["ADD_RECENT_FRIEND", "SET_FRIENDS"]),
     handleSend() {
       const cuser = this.currentUser;
-      console.log(cuser)
       this.ADD_RECENT_FRIEND({
         user: {
           nickName: cuser.nickName,
