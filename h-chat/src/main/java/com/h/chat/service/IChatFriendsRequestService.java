@@ -89,4 +89,12 @@ public interface IChatFriendsRequestService extends IService<ChatFriendsRequest>
      */
     void changeRequestStatusById(Long userId, Long requestId, String status);
 
+    /**
+     * 根据发送者接收者查询好友请求
+     * @param userId 发送者id
+     * @param acceptUserId 接收者id
+     * @return 结果
+     */
+    ChatFriendsRequest selectChatFriendsRequestBySendUserIdAndAcceptUserId(Long userId, Long acceptUserId);
+
 }

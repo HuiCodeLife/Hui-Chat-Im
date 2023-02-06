@@ -5,9 +5,9 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.h.chat.domain.ChatMsgDto;
-import com.h.chat.domain.TuLing.Perception;
-import com.h.chat.domain.TuLing.PostData;
-import com.h.chat.domain.TuLing.UserInfo;
+import com.h.chat.domain.Robot.Perception;
+import com.h.chat.domain.Robot.PostData;
+import com.h.chat.domain.Robot.UserInfo;
 import com.h.common.core.domain.entity.SysUser;
 
 import java.util.HashMap;

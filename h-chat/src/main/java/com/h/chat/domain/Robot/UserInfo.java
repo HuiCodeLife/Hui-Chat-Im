@@ -1,4 +1,4 @@
-package com.h.chat.domain.TuLing;
+package com.h.chat.domain.Robot;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

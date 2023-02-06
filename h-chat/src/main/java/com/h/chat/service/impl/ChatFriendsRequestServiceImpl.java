@@ -19,6 +19,8 @@ import com.h.chat.mapper.ChatFriendsRequestMapper;
 import com.h.chat.service.IChatFriendsRequestService;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.h.common.constant.FriendRequestConstants.*;
+
 /**
  * 好友请求Service业务层处理
  *
@@ -167,11 +169,12 @@ public class ChatFriendsRequestServiceImpl extends ServiceImpl<ChatFriendsReques
             throw new RuntimeException("id有误");
         }
 
-        if(!"0".equals(chatFriends.getStatus())){
+        if(!REQUEST_UNDO.equals(chatFriends.getStatus())){
             throw new RuntimeException("该请求已处理");
         }
+        SysUser user = userService.selectUserById(chatFriends.getSendUserId());
         //同意好友请求
-        if("1".equals(status)){
+        if(REQUEST_UNAGREE.equals(status)){
             //添加用户朋友关系表
             ChatUserFriends chatUserFriends = new ChatUserFriends();
             chatUserFriends.setUserId(userId);
@@ -181,20 +184,24 @@ public class ChatFriendsRequestServiceImpl extends ServiceImpl<ChatFriendsReques
             chatUserFriends.setFriendId(userId);
             chatUserFriendsService.save(chatUserFriends);
             // TODO 添加好友成功 返回信息
-//            MsgResult wsResult = new MsgResult();
-//            ChatMsgDto chatMsgDto = new ChatMsgDto();
-//            chatMsgDto.setContent("我们已经是好友了，来聊天吧");
-//            chatMsgDto.setTo();
-//            chatMsgDto.setFrom();
-//            chatMsgDto.sett
-//            wsResult.put("code", MsgStatus.SUCCESS);
-//            wsResult.put("data", chatMsgDto);
-//            simpMessagingTemplate.convertAndSendToUser(chatMsgDto.getTo(), "/queue/newFriends",wsResult);
-
+            // 同意添加
+            simpMessagingTemplate.convertAndSendToUser(user.getUserName(), "/queue/newRequest", NEW_AGREE_MSG);
+        }
+        if (REQUEST_REFUSE.equals(status)) {
+            // 拒绝添加
+            simpMessagingTemplate.convertAndSendToUser(user.getUserName(), "/queue/newRequest", NEW_REFUSE_MSG);
         }
         ChatFriendsRequest chatFriendsRequest = new ChatFriendsRequest();
         chatFriendsRequest.setId(requestId);
         chatFriendsRequest.setStatus(status);
         chatFriendsRequestMapper.updateById(chatFriendsRequest);
+    }
+
+    @Override
+    public ChatFriendsRequest selectChatFriendsRequestBySendUserIdAndAcceptUserId(Long userId, Long acceptUserId) {
+        LambdaQueryWrapper<ChatFriendsRequest> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ChatFriendsRequest::getSendUserId,userId);
+        queryWrapper.eq(ChatFriendsRequest::getAcceptUserId,acceptUserId);
+        return chatFriendsRequestMapper.selectOne(queryWrapper);
     }
 }

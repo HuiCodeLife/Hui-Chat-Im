@@ -3,7 +3,7 @@
     <!-- 好友列表 -->
     <div class="friend-wrapper">
       <!-- 搜索框 -->
-      <Search @clear="handleClear" @search="handleSearch" />
+      <Search @clear="handleClear" @search="handleSearch"/>
       <!-- 好友列表 -->
       <div class="friend-list">
         <ul>
@@ -21,44 +21,44 @@
             <div class="list-title">
               新的朋友
               <el-badge
-                :value="newRequestCount"
-                :max="99"
-                style="margin-bottom: 10px"
+                  :value="newRequestCount"
+                  :max="99"
+                  style="margin-bottom: 10px"
               >
               </el-badge>
             </div>
             <div
-              class="friend-info"
-              @click="selectId = 0"
-              :class="{ active: selectId == 0 }"
+                class="friend-info"
+                @click="selectId = 0"
+                :class="{ active: selectId == 0 }"
             >
               <img
-                width="36"
-                height="36"
-                src="/images/newfriend.jpg"
-                class="avatar"
+                  width="36"
+                  height="36"
+                  src="/images/newfriend.jpg"
+                  class="avatar"
               />
               <div class="remark">新的朋友</div>
             </div>
           </li>
           <li
-            v-for="(item, index) in searchList"
-            :key="index"
-            class="friend-item"
+              v-for="(item, index) in searchList"
+              :key="index"
+              class="friend-item"
           >
             <div class="list-title">{{ item.letter }}</div>
             <div
-              v-for="user in item.users"
-              :key="user.userid"
-              @click="selectId = user.userId"
-              :class="{ active: selectId == user.userId }"
-              class="friend-info"
+                v-for="user in item.users"
+                :key="user.userid"
+                @click="selectId = user.userId"
+                :class="{ active: selectId == user.userId }"
+                class="friend-info"
             >
               <img
-                width="36"
-                height="36"
-                :src="user.avatar"
-                class="avatar"
+                  width="36"
+                  height="36"
+                  :src="user.avatar"
+                  class="avatar"
               />
               <div class="remark">{{ user?.nickName }}</div>
             </div>
@@ -80,10 +80,10 @@
             </div>
             <div class="right">
               <img
-                class="avatar"
-                width="60"
-                height="60"
-                :src="
+                  class="avatar"
+                  width="60"
+                  height="60"
+                  :src="
                   currentUser?.avatar
                     ? currentUser?.avatar
                     : '/images/face/default.jpg'
@@ -104,34 +104,37 @@
       </div>
       <div v-show="!currentUser" style="height: 600px; overflow: auto">
         <el-descriptions
-          v-for="f in friendRequest"
-          :key="f.id"
-          style="margin: 50px"
-          :column="3"
-          size="mini"
-          border
+            v-for="f in friendRequest"
+            :key="f.id"
+            style="margin: 50px"
+            :column="3"
+            size="mini"
+            border
         >
           <template slot="extra">
             <el-button
-              type="success"
-              v-show="f.status === '0'"
-              size="small"
-              @click="doHandle(f.requestId, 1)"
-              >同意</el-button
+                type="success"
+                v-show="f.status === '0'"
+                size="small"
+                @click="doHandle(f.requestId, 1)"
+            >同意
+            </el-button
             >
             <el-button
-              type="info"
-              v-show="f.status === '0'"
-              size="small"
-              @click="doHandle(f.requestId, 3)"
-              >忽略</el-button
+                type="info"
+                v-show="f.status === '0'"
+                size="small"
+                @click="doHandle(f.requestId, 3)"
+            >忽略
+            </el-button
             >
             <el-button
-              type="danger"
-              v-show="f.status === '0'"
-              size="small"
-              @click="doHandle(f.requestId, 2)"
-              >拒绝</el-button
+                type="danger"
+                v-show="f.status === '0'"
+                size="small"
+                @click="doHandle(f.requestId, 2)"
+            >拒绝
+            </el-button
             >
           </template>
           <el-descriptions-item>
@@ -168,7 +171,7 @@
               <i class="el-icon-office-building"></i>
               头像
             </template>
-            <img width="50px" :src="f.avatar" alt="" />
+            <img width="50px" :src="f.avatar" alt=""/>
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
@@ -196,48 +199,49 @@
           </el-descriptions-item>
         </el-descriptions>
         <el-empty
-          v-show="friendRequest.length === 0"
-          description="无新的好友请求"
+            v-show="friendRequest.length === 0"
+            description="无新的好友请求"
         ></el-empty>
       </div>
     </div>
 
     <el-drawer title="通讯录管理" :visible.sync="table" size="50%">
       <el-table
-        :data="
+          :data="
           friendList.filter(
             (data) =>
               !search ||
               data.nickName.toLowerCase().includes(search.toLowerCase())
           )
         "
-        style="width: 100%; margin-left: 10px"
+          style="width: 100%; margin-left: 10px"
       >
-        <el-table-column label="昵称" prop="nickName"> </el-table-column>
+        <el-table-column label="昵称" prop="nickName"></el-table-column>
         <el-table-column label="头像" width="100">
           <template slot-scope="scope">
             <img
-              class="avatar"
-              width="60"
-              height="60"
-              :src="scope.row.avatar"
+                class="avatar"
+                width="60"
+                height="60"
+                :src="scope.row.avatar"
             />
           </template>
         </el-table-column>
         <el-table-column align="right">
           <template slot="header" slot-scope="scope">
             <el-input
-              v-model="search"
-              size="mini"
-              placeholder="输入关键字搜索"
+                v-model="search"
+                size="mini"
+                placeholder="输入关键字搜索"
             />
           </template>
           <template slot-scope="scope">
             <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除好友</el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+            >删除好友
+            </el-button
             >
           </template>
         </el-table-column>
@@ -247,17 +251,18 @@
 </template>
 
 <script>
-import { changeRequestStatus, deleteFriend } from "@/api/user";
+import {changeRequestStatus, deleteFriend} from "@/api/user";
 import Search from "@/components/Search";
-import { mapMutations, mapState } from "vuex";
+import {mapMutations, mapState} from "vuex";
 import {
   getFriends,
   searchFriends,
   addUserByUserId,
-  friendsRequest,
 } from "@/api/user";
-import { pinyin } from "pinyin-pro";
-import { Message } from "element-ui";
+import {pinyin} from "pinyin-pro";
+import {Message} from "element-ui";
+
+
 export default {
   name: "ChatFriends",
   components: {
@@ -271,19 +276,16 @@ export default {
       friendsUsername: "",
       hasSearchUser: true,
       searchUser: null,
-      friendRequest: [],
       table: false,
       search: "",
-      newRequestCount: 0,
       dialogVisible: false,
     };
   },
   created() {
     this.getFriends();
-    this.getRequestFriends();
   },
   methods: {
-    ...mapMutations(["ADD_RECENT_FRIEND", "SET_FRIENDS"]),
+    ...mapMutations(["ADD_RECENT_FRIEND", "SET_FRIENDS", "CHANGE_REQUEST"]),
     handleSend() {
       const cuser = this.currentUser;
       this.ADD_RECENT_FRIEND({
@@ -298,55 +300,53 @@ export default {
       });
       this.$router.push("/chat-list");
     },
-    getRequestFriends() {
-      friendsRequest().then((res) => {
-        this.friendRequest = res.data;
-        this.newRequestCount = res.newRequestCount;
-      });
-    },
+
     getFriends() {
       getFriends().then((res) => {
-
         let data = res.data;
         this.SET_FRIENDS(data);
         localStorage.setItem(
-          "friendList:" + this.user.userId,
-          JSON.stringify(data)
+            "friendList:" + this.user.userId,
+            JSON.stringify(data)
         );
-        let f = new Array();
-        f = data;
-        const set = new Set();
+        this.buildContant(data);
+      });
+      this.selectId = this.friends[0]?.users[0].userId || 0;
+    },
+    buildContant(data) {
+      console.log("重构通讯录列表")
+      let f = new Array();
+      f = data;
+      const set = new Set();
+      f.forEach((u) => {
+        let letter = pinyin(u.nickName, {
+          pattern: "first",
+          toneType: "none",
+          type: "array",
+        })[0].toUpperCase();
+        set.add(letter);
+      });
+      let result = new Array();
+      set.forEach((l) => {
+        let letterObj = {
+          letter: l,
+          users: [],
+        };
         f.forEach((u) => {
-          let letter = pinyin(u.nickName, {
-            pattern: "first",
-            toneType: "none",
-            type: "array",
-          })[0].toUpperCase();
-          set.add(letter);
-        });
-        let result = new Array();
-        set.forEach((l) => {
-          let letterObj = {
-            letter: l,
-            users: [],
-          };
-          f.forEach((u) => {
-            if (
+          if (
               l ===
               pinyin(u.nickName, {
                 pattern: "first",
                 toneType: "none",
                 type: "array",
               })[0].toUpperCase()
-            ) {
-              letterObj.users.push(u);
-            }
-          });
-          result.push(letterObj);
+          ) {
+            letterObj.users.push(u);
+          }
         });
-        this.friends = result;
+        result.push(letterObj);
       });
-      this.selectId = this.friends[0]?.users[0].userId || 0;
+      this.friends = result;
     },
     // 搜索功能
     handleSearch(v) {
@@ -357,12 +357,12 @@ export default {
     },
     handleAdd() {
       addUserByUserId(this.searchUser.userId).then(() => {
-        Message({ message: "发送好友请求成功!", type: "success" });
+        Message({message: "请求已发送", type: "success"});
       });
     },
     async doHandle(requestId, status) {
       await changeRequestStatus(requestId, status)
-      this.getRequestFriends();
+      this.CHANGE_REQUEST()
       this.getFriends()
     },
     handleDelete(index, row) {
@@ -372,23 +372,24 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       })
-        .then(() => {
-          deleteFriend(row.userId).then(() => {
-            getFriends().then((res) => {
-              this.SET_FRIENDS(res.data);
-              this.$message({
-                type: "success",
-                message: "删除成功!",
+          .then(() => {
+            deleteFriend(row.userId).then(() => {
+              getFriends().then((res) => {
+                this.SET_FRIENDS(res.data);
+                this.$message({
+                  type: "success",
+                  message: "删除成功!",
+                });
               });
+              this.getFriends()
             });
-            this.getFriends()
+          })
+          .catch(() => {
           });
-        })
-        .catch(() => {});
     },
   },
   computed: {
-    ...mapState(["friendList", "user"]),
+    ...mapState(["friendList", "user", "friendRequest", "newRequestCount"]),
     currentUser() {
       // 根据userId返回用户信息
       let user = null;
@@ -440,6 +441,10 @@ export default {
         }
       });
     },
+    friendList(newValue) {
+      console.log("用户列表改变")
+      this.buildContant(newValue);
+    }
   },
 };
 </script>
@@ -457,6 +462,7 @@ export default {
     .wrapper {
       padding: 22px 12px 12px 12px;
       background: #f7f7f7;
+
       .search-wrapper {
         position: relative;
         display: flex;
@@ -466,16 +472,19 @@ export default {
         background-color: #e5e3e2;
         border: 1px solid #d9d7d6;
         border-radius: 2px;
+
         .searchInput {
           flex: 1;
           font-size: 12px;
           padding: 6px;
           background-color: #e5e3e2;
           outline: none;
+
           &:focus {
             background-color: #f2efee;
           }
         }
+
         .icon-search {
           display: inline-block;
           width: 24px;
@@ -484,6 +493,7 @@ export default {
           line-height: 24px;
           text-align: center;
         }
+
         .searchInput-delete {
           display: block;
           position: absolute;
@@ -500,16 +510,20 @@ export default {
         }
       }
     }
+
     // 好友列表
     .friend-list {
       height: 540px;
       overflow-y: auto;
+
       .friend-item {
         border-top: 1px solid #dadada;
+
         &:first-child,
         &.no-border {
           border-top: none;
         }
+
         .list-title {
           box-sizing: border-box;
           width: 100%;
@@ -524,11 +538,13 @@ export default {
           transition: background-color 0.1s;
           font-size: 0;
           margin: 0 auto;
+
           .addr-box {
             width: 280px;
             height: 45px;
             background-color: #fff;
           }
+
           .remark {
             font-size: 14px;
             line-height: 45px;
@@ -541,16 +557,20 @@ export default {
           padding: 12px;
           transition: background-color 0.1s;
           font-size: 0;
+
           &:hover {
             background-color: rgb(220, 220, 220);
           }
+
           &.active {
             background-color: #c4c4c4;
           }
+
           .avatar {
             border-radius: 2px;
             margin-right: 12px;
           }
+
           .remark {
             font-size: 14px;
             line-height: 36px;
@@ -562,29 +582,36 @@ export default {
 
   .friend-info {
     flex: 1;
+
     .new-friend {
       height: 60px;
       padding: 28px 0 0 30px;
       box-sizing: border-box;
       border-bottom: 1px solid #e7e7e7;
+
       .nickname {
         font-size: 18px;
       }
     }
+
     .friend-info {
       padding: 0 90px;
+
       .es-info {
         display: flex;
         align-items: center;
         padding: 100px 0 45px 0;
+
         .left {
           flex: 1;
+
           .people {
             .nickname {
               display: inline-block;
               font-size: 20px;
               margin-bottom: 16px;
             }
+
             .gender-male,
             .gender-female {
               display: inline-block;
@@ -593,45 +620,54 @@ export default {
               vertical-align: top;
               margin-top: 2px;
             }
+
             .gender-male {
               background-image: url(../../../public/images/man.png);
               background-size: cover;
             }
+
             .gender-female {
               background-image: url(../../../public/images/woman.png);
               background-size: cover;
             }
           }
+
           .signature {
             font-size: 14px;
             color: rgba(153, 153, 153, 0.8);
           }
         }
+
         .right {
           .avatar {
             border-radius: 3px;
           }
         }
       }
+
       .detInfo {
         padding: 40px 0;
         border-top: 1px solid #e7e7e7;
         border-bottom: 1px solid #e7e7e7;
+
         .remark,
         .area,
         .wxid {
           font-size: 14px;
           margin-top: 20px;
+
           span {
             font-size: 14px;
             color: rgba(153, 153, 153, 0.8);
             margin-right: 40px;
           }
         }
+
         .remark {
           margin-top: 0;
         }
       }
+
       .send {
         position: relative;
         text-align: center;
@@ -645,6 +681,7 @@ export default {
         background-color: #1aad19;
         cursor: pointer;
         border-radius: 2px;
+
         &:hover {
           background: rgb(18, 150, 17);
         }

@@ -4,9 +4,8 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 import {getToken, setToken, removeToken} from "@/utils/auth";
 import {login, logout, getInfo} from "@/api/login";
-import {pullUnreadMessage} from "@/api/user";
+import {pullUnreadMessage, friendsRequest, getFriends} from "@/api/user";
 import {Notification} from "element-ui";
-
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import newMsg from "@/assets/audio/newMsg.mp3";
@@ -21,17 +20,17 @@ const state = {
     // 表情数据
     emojis: [
         {file: "100.gif", title: "微笑"},
-        {file: "101.gif", title: "伤心" },
+        {file: "101.gif", title: "伤心"},
         {file: "102.gif", title: "美女"},
         {file: "103.gif", title: "发呆"},
         {file: "104.gif", title: "墨镜"},
-        {file: "105.gif", title: "哭" },
-        {file: "106.gif", title: "羞" },
+        {file: "105.gif", title: "哭"},
+        {file: "106.gif", title: "羞"},
         {file: "107.gif", title: "哑"},
-        {file: "108.gif", title: "睡" },
+        {file: "108.gif", title: "睡"},
         {file: "109.gif", title: "哭"},
         {file: "110.gif", title: "囧"},
-        {file: "111.gif", title: "怒" },
+        {file: "111.gif", title: "怒"},
         {file: "112.gif", title: "调皮"},
         {file: "113.gif", title: "笑"},
         {file: "114.gif", title: "惊讶"},
@@ -45,7 +44,7 @@ const state = {
         {file: "122.gif", title: "奇"},
         {file: "123.gif", title: "傲"},
         {file: "124.gif", title: "饿"},
-        {file: "125.gif",title: "累"},
+        {file: "125.gif", title: "累"},
         {file: "126.gif", title: "吓"},
         {file: "127.gif", title: "汗"},
         {file: "128.gif", title: "高兴"},
@@ -55,10 +54,10 @@ const state = {
         {file: "133.gif", title: "秘密"},
         {file: "134.gif", title: "乱"},
         {file: "135.gif", title: "疯"},
-        {file: "136.gif",title: "哀"},
+        {file: "136.gif", title: "哀"},
         {file: "137.gif", title: "鬼"},
         {file: "138.gif", title: "打击"},
-        {file: "139.gif",title: "bye"},
+        {file: "139.gif", title: "bye"},
         {file: "142.gif", title: "鼓掌"},
         {file: "145.gif", title: "什么"},
         {file: "147.gif", title: "累"},
@@ -70,6 +69,8 @@ const state = {
         {file: "159.gif", title: "乒乓"},
     ],
     stomp: null,
+    friendRequest: [],
+    newRequestCount: 0
 };
 
 
@@ -168,6 +169,11 @@ const actions = {
                     });
                 }
             });
+            //首次获取好友请求信息
+            friendsRequest().then((res) => {
+                state.friendRequest = res.data;
+                state.newRequestCount = res.newRequestCount;
+            });
             state.stomp = Stomp.over(new SockJS("http://localhost:8080/ws/ep"));
             state.stomp.connect({Authorization: state.token}, () => {
                 // 订阅私人聊天消息
@@ -180,6 +186,30 @@ const actions = {
                     handlerMsg(msg, state, commit);
                 });
 
+                state.stomp.subscribe("/user/queue/newRequest", (msg) => {
+
+                    // msg = JSON.stringify(msg)
+                    console.log("@@", msg.body)
+                    // console.log(typeof (msg))
+                    console.log(msg.body === "4")
+                    if (msg.body === '4') {
+                        //  新的好友请求
+                        console.log("收到新好友请求.........")
+                        commit("FRIEND_REQUEST");
+                    } else if (msg.body === '5') {
+                        console.log("收到好友同意请求")
+                        commit("CHANGE_REQUEST");
+                        getFriends().then((res) => {
+                            console.log(res.data)
+                            commit("SET_FRIENDS", res.data)
+                        })
+                        Notification.success({
+                            title: "系统消息",
+                            message: "有好友同意了您的请求",
+                            position: "top-right",
+                        });
+                    }
+                })
             }),
                 () => {
                     Notification.error({
@@ -249,18 +279,37 @@ const mutations = {
     SET_AVATAR: (state, avatar) => {
         state.user.avatar = avatar;
     },
-};
+
+    FRIEND_REQUEST: (state) => {
+        friendsRequest().then((res) => {
+            state.friendRequest = res.data;
+            state.newRequestCount = res.newRequestCount;
+        });
+        Notification.success({
+            title: "系统消息",
+            message: "你有新的好友请求",
+            position: "top-right",
+        });
+    },
+    CHANGE_REQUEST: (state) => {
+        friendsRequest().then((res) => {
+            state.friendRequest = res.data;
+            state.newRequestCount = res.newRequestCount;
+        });
+    },
+
+}
 
 export default new Vuex.Store({
     state,
     actions,
     mutations,
 });
+
 function handlerMsg(msg, state, commit) {
     let res = JSON.parse(msg.body);
     if (res.code !== 2000) {
         alert("不是好友,消息发送失败!");
-
         return;
     }
     let receiveMsg = res.data;

@@ -140,7 +140,7 @@ export default {
     this.LOAD_RECENT_FRIENDS();
     const {data} = await getFriends();
     this.SET_FRIENDS(data);
-    this.$store.dispatch("Connect");
+    await this.$store.dispatch("Connect");
     this.timer = setInterval(() => {
       this.$store.dispatch("Connect");
     }, 10000);

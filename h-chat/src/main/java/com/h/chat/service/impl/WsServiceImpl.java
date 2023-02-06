@@ -90,7 +90,6 @@ public class WsServiceImpl implements WsService {
         ChatMsg chatMsg = new ChatMsg();
         BeanUtil.copyProperties(chatMsgDto, chatMsg);
         chatMsg.setSendUserId(user.getUserId());
-//        chatMsgService.save(chatMsg);
         chatMsgService.insertChatMsg(chatMsg);
         wsResult.put("code", MsgStatus.SUCCESS);
         wsResult.put("data", chatMsgDto);

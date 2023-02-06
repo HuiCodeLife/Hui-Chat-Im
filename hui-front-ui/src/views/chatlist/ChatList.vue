@@ -175,7 +175,7 @@ export default {
     ...mapMutations(["ADD_RECENT_FRIEND", "REMOVE_RECENT_FRIEND"]),
     //点击更多
     handleMore() {
-      Message({message: "该功能尚未实现", type: "info"});
+      Message({message: "敬请期待", type: "info"});
     },
     showHandle(value) {
       this.isShow = value;

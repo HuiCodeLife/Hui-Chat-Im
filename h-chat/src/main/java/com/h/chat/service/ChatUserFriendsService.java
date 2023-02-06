@@ -2,6 +2,7 @@ package com.h.chat.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.h.chat.domain.ChatUserFriends;
+import com.h.common.core.domain.AjaxResult;
 
 /**
  * 好友相关Service接口
