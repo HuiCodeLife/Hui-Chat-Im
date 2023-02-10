@@ -41,6 +41,8 @@ hui-front-ui:
 
 hui-admin-ui:
 
+![image-20230210155929844](https://gitee.com/Lin-ChangHui/picture-bed/raw/master/images/202302101559051.png)
+
 ![image-20230201111027792](https://gitee.com/Lin-ChangHui/picture-bed/raw/master/images/202302011110895.png)
 
 
