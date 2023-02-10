@@ -2,7 +2,9 @@
 
 # Hui-Chat-Im
 
-Hui-Chat-Im通讯系统,基于Springboot + Vue框架开发的网页版仿微信即时通讯系统，此为个人项目，基于若依后台权限管理框架，使用了Spring Security安全框架，以WebSocket实现消息的发送与接收，监听，实时推送消息、使用MyBatis结合数据库MySQL保存数据等。
+Hui-Chat-Im通讯系统,基于Springboot + Vue框架开发的网页版仿微信即时通讯系统，此为个人项目,仅供个人学习使用，基于若依后台权限管理框架使用了Spring Security安全框架，以WebSocket实现消息的发送与接收，监听，实时推送消息、使用MyBatis结合数据库MySQL保存数据等。
+
+
 
 ## 后端技术栈
 
@@ -10,8 +12,8 @@ Hui-Chat-Im通讯系统,基于Springboot + Vue框架开发的网页版仿微信�
 2. Spring Security
 3. MyBatis
 4. MySQL
-5. WebSocket
-6. Redis
+5. Redis
+6. WebSocket
 7. Minio
 
 ## 前端技术栈：
@@ -31,9 +33,13 @@ hui-front-ui:
 ![image-20230201110743947](https://gitee.com/Lin-ChangHui/picture-bed/raw/master/images/202302011107156.png)
 
 ![image-20230201111722482](https://gitee.com/Lin-ChangHui/picture-bed/raw/master/images/202302011212085.png)
+添加个人中心:
 
+![image-20230210161859571](https://gitee.com/Lin-ChangHui/picture-bed/raw/master/images/202302101618783.png)
 
+![image-20230210161912949](https://gitee.com/Lin-ChangHui/picture-bed/raw/master/images/202302101619100.png)
 
+![image-20230210161933423](https://gitee.com/Lin-ChangHui/picture-bed/raw/master/images/202302101619577.png)
 
 ![image-20230201110833148](https://gitee.com/Lin-ChangHui/picture-bed/raw/master/images/202302011108322.png)
 
