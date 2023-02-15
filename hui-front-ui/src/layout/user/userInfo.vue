@@ -71,6 +71,8 @@ export default {
           updateUserProfile(this.user).then(response => {
             Message({ message: '修改成功', type: 'success' })
           });
+          this.$emit('closeDialog')
+
         }
       });
     },

@@ -68,7 +68,7 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: 192.168.200.131
+    host: localhost
     # 端口，默认为6379
     port: 6379
     # 数据库索引
@@ -146,7 +146,7 @@ aj:
 
 # Minio配置
 minio:
-  url: http://192.168.200.131:9001
-  accessKey: uHxZ04yzdbCGSayh
-  secretKey: g6So1L6pwFMqCW0iuU50lyyQ92shzqqs
+  url: http://localhost:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
   bucketName: chat
