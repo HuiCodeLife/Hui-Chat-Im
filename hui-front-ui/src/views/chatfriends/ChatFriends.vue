@@ -214,9 +214,17 @@
               data.nickName.toLowerCase().includes(search.toLowerCase())
           )
         "
-          style="width: 100%; margin-left: 10px"
+          style="width: 100%; margin-left: 10px; padding :0 15px;"
       >
-        <el-table-column label="昵称" prop="nickName"></el-table-column>
+        <el-table-column label="昵称"  width="100" prop="nickName"></el-table-column>
+        <el-table-column label="邮箱"  width="150" prop="email"></el-table-column>
+        <el-table-column label="电话"  width="150" prop="phonenumber"></el-table-column>
+        <el-table-column label="性别"  width="100" prop="sex">
+          <template slot-scope="scope">
+            <el-tag v-show="scope.row.sex === '0'" size="small">男</el-tag>
+            <el-tag v-show="scope.row.sex === '1'" size="small">女</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="头像" width="100">
           <template slot-scope="scope">
             <img
@@ -227,9 +235,10 @@
             />
           </template>
         </el-table-column>
-        <el-table-column align="right">
+        <el-table-column >
           <template slot="header" slot-scope="scope">
             <el-input
+            style="margin-right: 10px;"
                 v-model="search"
                 size="mini"
                 placeholder="输入关键字搜索"

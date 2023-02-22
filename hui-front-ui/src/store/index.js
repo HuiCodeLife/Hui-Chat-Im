@@ -17,7 +17,7 @@ const state = {
     // 最近聊天的好友
     recentFriends: [],
     friendList: [],
-    // 表情数据
+    // TODO 表情数据整理到单独JSON
     emojis: [
         {file: "100.gif", title: "微笑"},
         {file: "101.gif", title: "伤心"},

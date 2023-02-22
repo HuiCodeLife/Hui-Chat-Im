@@ -17,6 +17,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.10</version>
+        </dependency>
         <!-- Minio 文件存储 -->
         <dependency>
             <groupId>io.minio</groupId>

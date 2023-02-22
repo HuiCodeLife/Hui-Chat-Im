@@ -1,6 +1,7 @@
 package com.h.framework.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import com.h.common.constant.CacheConstants;
 import com.h.common.constant.Constants;
@@ -20,7 +21,7 @@ import com.h.system.service.ISysUserService;
 
 /**
  * 注册校验方法
- * 
+ *
  * @author ruoyi
  */
 @Component
@@ -35,25 +36,29 @@ public class SysRegisterService
     @Autowired
     private RedisCache redisCache;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     /**
      * 注册
      */
     public String register(RegisterBody registerBody)
     {
-        String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
+        String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword(), email = registerBody.getEmail();
         SysUser sysUser = new SysUser();
         sysUser.setUserName(username);
 
-        // 验证码开关
-        boolean captchaEnabled = configService.selectCaptchaEnabled();
-        if (captchaEnabled)
-        {
-            validateCaptcha(username, registerBody.getCode(), registerBody.getUuid());
-        }
+        // 校验邮箱验证码
+        validateCode(registerBody.getCode(),registerBody.getEmail());
 
         if (StringUtils.isEmpty(username))
         {
             msg = "用户名不能为空";
+        }
+
+        if (StringUtils.isEmpty(email))
+        {
+            msg = "邮箱不能为空";
         }
         else if (StringUtils.isEmpty(password))
         {
@@ -77,6 +82,7 @@ public class SysRegisterService
         {
             sysUser.setNickName(username);
             sysUser.setPassword(SecurityUtils.encryptPassword(password));
+            sysUser.setEmail(registerBody.getEmail());
             boolean regFlag = userService.registerUser(sysUser);
             if (!regFlag)
             {
@@ -91,8 +97,28 @@ public class SysRegisterService
     }
 
     /**
+     * 获取邮箱验证码
+     * @param code
+     * @param email
+     */
+    private void validateCode( String code, String email) {
+        String verifyKey = CacheConstants.REGISTER_CODE_KEY + StringUtils.nvl(email, "");
+        String captcha = stringRedisTemplate.opsForValue().get(verifyKey);
+        redisCache.deleteObject(verifyKey);
+        if (captcha == null)
+        {
+            throw new CaptchaExpireException();
+        }
+        if (!code.equalsIgnoreCase(captcha))
+        {
+            throw new CaptchaException();
+        }
+
+    }
+
+    /**
      * 校验验证码
-     * 
+     *
      * @param username 用户名
      * @param code 验证码
      * @param uuid 唯一标识

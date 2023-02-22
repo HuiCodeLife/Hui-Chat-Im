@@ -33,3 +33,26 @@ export function logout() {
     method: 'post'
   })
 }
+export function sendCode(email) {
+  return request({
+    url: '/chat/user/code',
+    method: 'post',
+    headers: {
+      isToken: false
+    },
+    params: {
+      email: email
+    }
+  })
+}
+// 注册方法
+export function register(data) {
+  return request({
+    url: '/register',
+    headers: {
+      isToken: false
+    },
+    method: 'post',
+    data: data
+  })
+}

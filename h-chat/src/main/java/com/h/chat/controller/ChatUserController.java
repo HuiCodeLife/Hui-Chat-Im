@@ -9,6 +9,7 @@ import com.h.common.constant.FriendRequestConstants;
 import com.h.common.core.controller.BaseController;
 import com.h.common.core.domain.AjaxResult;
 import com.h.common.core.domain.entity.SysUser;
+import com.h.common.core.domain.model.RegisterBody;
 import com.h.common.utils.SecurityUtils;
 import com.h.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +100,15 @@ public class ChatUserController extends BaseController {
         return AjaxResult.success();
     }
 
+
+    /**
+     * 发送邮件验证码
+     * @param email 邮箱地址
+     * @return
+     */
+    @PostMapping("/code")
+    public AjaxResult sendCode(@RequestParam("email") String email){
+        return userService.sendCode(email);
+    }
 
 }

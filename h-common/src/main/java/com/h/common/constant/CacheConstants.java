@@ -2,7 +2,7 @@ package com.h.common.constant;
 
 /**
  * 缓存的key 常量
- * 
+ *
  * @author ruoyi
  */
 public class CacheConstants
@@ -41,4 +41,17 @@ public class CacheConstants
      * 登录账户密码错误次数 redis key
      */
     public static final String PWD_ERR_CNT_KEY = "pwd_err_cnt:";
+
+    /**
+     * 注册验证码
+     */
+    public static final String REGISTER_CODE_KEY = "register_code_key:";
+
+
+    /**
+     * 注册验证码过期时间
+     */
+    public static final Long REGISTER_CODE_TTL = 5L;
+
+
 }

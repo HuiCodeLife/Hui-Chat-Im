@@ -2,13 +2,18 @@ package com.h.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.h.common.core.domain.AjaxResult;
+import com.h.common.utils.RegexUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -31,6 +36,9 @@ import com.h.system.mapper.SysUserPostMapper;
 import com.h.system.mapper.SysUserRoleMapper;
 import com.h.system.service.ISysConfigService;
 import com.h.system.service.ISysUserService;
+
+import static com.h.common.constant.CacheConstants.REGISTER_CODE_KEY;
+import static com.h.common.constant.CacheConstants.REGISTER_CODE_TTL;
 
 /**
  * 用户 业务层处理
@@ -62,6 +70,10 @@ public class SysUserServiceImpl  extends ServiceImpl<SysUserMapper, SysUser> imp
 
     @Autowired
     protected Validator validator;
+
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 根据条件分页查询用户列表
@@ -558,6 +570,26 @@ public class SysUserServiceImpl  extends ServiceImpl<SysUserMapper, SysUser> imp
     @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserListCommon(SysUser user) {
         return userMapper.selectUserListCommon(user);
+    }
+
+    @Override
+    public AjaxResult sendCode(String email) {
+        // 1.校验email
+        if (RegexUtils.isEmailInvalid(email)) {
+            // 2.如果不符合，返回错误信息
+            return AjaxResult.error("邮箱格式错误！");
+        }
+
+        // 3.符合，生成验证码
+        String code = RandomUtil.randomNumbers(6);
+
+        // 4.保存验证码到redis
+        stringRedisTemplate.opsForValue().set(REGISTER_CODE_KEY + email, code, REGISTER_CODE_TTL, TimeUnit.MINUTES);
+
+        // 5.发送验证码
+        log.debug("发送验证码成功，验证码：{}", code);
+
+        return AjaxResult.success();
     }
 
 

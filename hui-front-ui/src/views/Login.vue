@@ -2,84 +2,149 @@
   <div class="login-container">
     <div class="login-main">
       <el-form
-        :model="loginForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="100px"
+          :model="loginForm"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="100px"
       >
-        <h3 class="loginTitle">🥝HuiChat</h3>
+        <h3 class="loginTitle">欢迎登入🥝HuiChat通讯系统</h3>
         <el-form-item label="用户名:" prop="username">
           <el-input
-            type="text"
-            v-model="loginForm.username"
-            auto-complete="off"
-            placeholder="请输入用户名"
+              type="text"
+              v-model="loginForm.username"
+              auto-complete="off"
+              placeholder="请输入用户名"
+              style="width:80%"
           ></el-input>
         </el-form-item>
         <el-form-item label="密码:" prop="password">
           <el-input
-            type="password"
-            v-model="loginForm.password"
-            auto-complete="off"
-            placeholder="请输入密码"
-            @keyup.enter.native="login"
-
+              type="password"
+              v-model="loginForm.password"
+              auto-complete="off"
+              placeholder="请输入密码"
+              style="width:80%"
+              @keyup.enter.native="login"
           ></el-input>
         </el-form-item>
         <Verify
-        @success="capctchaCheckSuccess"
-        :mode="'pop'"
-        :captchaType="'blockPuzzle'"
-        :imgSize="{ width: '330px', height: '155px' }"
-        ref="verify"
-      ></Verify>
-        <!-- <el-form-item label="验证码:" prop="code">
-          <el-input
-            type="text"
-            v-model="loginForm.code"
-            auto-complete="off"
-            placeholder="请输入验证码"
-            style="width: 60%; vertical-align: middle"
-            @keyup.enter.native="login"
+            @success="capctchaCheckSuccess"
+            :mode="'pop'"
+            :captchaType="'blockPuzzle'"
+            :imgSize="{ width: '330px', height: '155px' }"
+            ref="verify"
+        ></Verify>
 
-          ></el-input>
-          <img
-            style="
-              width: 35%;
-              margin-left: 5%;
-              height: 40px;
-              vertical-align: middle;
-            "
-            :src="codeUrl"
-            @click="getCode()"
-            title="点击切换验证码"
-          />
-        </el-form-item> -->
         <div style="text-align: center">
           <el-button
-            :loading="loading"
-            type="primary"
-            style="width: 45%"
-            @keyup.enter.native="login"
-            @click="login"
+              :loading="loading"
+              type="primary"
+              style="width: 30%"
+              @keyup.enter.native="login"
+              @click="login"
           >
             <span v-if="!loading">登 录</span>
             <span v-else>登 录 中...</span>
           </el-button>
+          <el-button
+              type="success"
+              style="width: 30%"
+              @click="centerDialogVisible = true;"
+          >
+            <span>注 册</span>
+          </el-button>
         </div>
       </el-form>
     </div>
+    <el-dialog
+        title="欢迎注册🥝HuiChat"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        :close-on-click-modal="false"
+        center
+    >
+      <el-form
+          :model="registerForm"
+          :rules="registerRules"
+          ref="registerRuleForm"
+          label-width="100px"
+      >
+        <el-form-item label="用户名:" prop="username">
+          <el-input
+              type="text"
+              v-model="registerForm.username"
+              auto-complete="off"
+              placeholder="请输入用户名"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="密码:" prop="password">
+          <el-input
+              type="password"
+              v-model="registerForm.password"
+              auto-complete="off"
+              placeholder="请输入密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码:" prop="confirmPassword">
+          <el-input
+              type="password"
+              v-model="registerForm.confirmPassword"
+              auto-complete="off"
+              placeholder="请再次输入密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱:" prop="email">
+          <el-input
+              v-model="registerForm.email"
+              auto-complete="off"
+              placeholder="请输入邮箱地址"
+          ></el-input>
+          <el-button
+              type="success"
+              @click="getEmailCode"
+              :disabled="disable"
+              size="mini"
+          >{{ buttonName }}
+          </el-button
+          >
+        </el-form-item>
+        <el-form-item label="邮箱验证码" prop="code">
+          <el-input
+              v-model="registerForm.code"
+              auto-complete="off"
+              placeholder="邮箱验证码"
+          >
+          </el-input>
+          <div class="register-code">
+            <img :src="codeUrl" class="register-code-img"/>
+          </div>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="registerUser"
+        >注 册</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-// import { getCodeImg } from "@/api/login";
 import Verify from "@/components/Verifition/Verify";
+import {sendCode,register} from "@/api/login"
 
 export default {
   name: "Login",
-  components: { Verify },
+  components: {Verify},
   data() {
+    const equalToPassword = (rule, value, callback) => {
+      if (this.registerForm.password !== value) {
+        callback(new Error("两次输入的密码不一致"));
+      } else {
+        callback();
+      }
+    };
     return {
       loginForm: {
         username: "admin",
@@ -87,12 +152,22 @@ export default {
         uuid: "",
         code: "",
       },
+      buttonName: "获取验证码",
+      count: 120,
+      disable: false,
+      registerForm: {
+        username: "",
+        password: "",
+        confirmPassword: "",
+        email: "",
+        code: "",
+      },
       loading: false,
-
+      centerDialogVisible: false,
       codeUrl: "",
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          {required: true, message: "请输入用户名", trigger: "blur"},
           {
             min: 2,
             max: 16,
@@ -101,59 +176,109 @@ export default {
           },
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
+          {required: true, message: "请输入密码", trigger: "blur"},
           {
             min: 4,
             max: 20,
             message: "长度在 4 到 20 个字符",
             trigger: "blur",
           },
+        ]
+      },
+      registerRules: {
+        username: [
+          {required: true, trigger: "blur", message: "请输入您的账号"},
+          {
+            min: 2,
+            max: 20,
+            message: "用户账号长度必须介于 2 和 20 之间",
+            trigger: "blur",
+          },
         ],
-        // code: [
-        //   { required: true, message: "请输入验证码", trigger: "blur" },
-        //   { min: 4, max: 4, message: "请输入正确的验证码", trigger: "blur" },
-        // ],
+        password: [
+          {required: true, trigger: "blur", message: "请输入您的密码"},
+          {
+            min: 5,
+            max: 20,
+            message: "用户密码长度必须介于 5 和 20 之间",
+            trigger: "blur",
+          },
+        ],
+        confirmPassword: [
+          {required: true, trigger: "blur", message: "请再次输入您的密码"},
+          {required: true, validator: equalToPassword, trigger: "blur"},
+        ],
+        email: [
+          {required: true, message: "请输入邮箱地址", trigger: "blur"},
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"],
+          },
+        ],
+        code: [{required: true, trigger: "change", message: "请输入验证码"}],
       },
     };
   },
-  created() {
-    // this.getCode();
-  },
   methods: {
-    // getCode() {
-    //   getCodeImg().then((res) => {
-    //     this.codeUrl = "data:image/gif;base64," + res.img;
-    //     this.loginForm.uuid = res.uuid;
-    //   });
-    // },
+    getEmailCode() {
+      //需要单独验证的字段名email
+      this.$refs.registerRuleForm.validateField("email", (val) => {
+        if (!val) {
+          sendCode(this.registerForm.email).then(() => {
+            let timeout = setInterval(() => {
+              if (this.count < 1) {
+                this.disable = false;
+                this.buttonName = "获取验证码";
+                this.count = 120;
+                clearInterval(timeout);
+              } else {
+                this.disable = true;
+                this.buttonName = this.count-- + "s后重发";
+              }
+            }, 1000);
+            this.$message({
+              message: '验证码发送成功，注意查收',
+              type: 'success'
+            });
+          })
+        }
+      });
+    },
+
     capctchaCheckSuccess(params) {
       this.loginForm.code = params.captchaVerification;
       this.loading = true;
-      this.$store.dispatch("Login", this.loginForm).then(() => {
-          this.$router.push({ path: this.redirect || "/" }).catch(() => {});
-        }).catch(() => {
-          this.loading = false;
-        });
+      this.$store
+          .dispatch("Login", this.loginForm)
+          .then(() => {
+            this.$router.push({path: this.redirect || "/"}).catch(() => {
+            });
+          })
+          .catch(() => {
+            this.loading = false;
+          });
     },
     login() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           this.$refs.verify.show();
-          // this.loading = true;
-          // this.$store
-          //   .dispatch("Login", this.loginForm)
-          //   .then(() => {
-          //     console.log(11);
-          //     this.$store.dispatch("GetInfo").then(()=>{
-          //       this.$router.push("/chat-list").catch(() => {});
-          //     })
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //     this.loading = false;
-          //     this.loginForm.code = ''
-          //     this.getCode();
-          //   });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    registerUser() {
+      this.$refs.registerRuleForm.validate((valid) => {
+        if (valid) {
+          register(this.registerForm).then(()=>{
+            this.centerDialogVisible = false
+            this.$message({
+              message: '注册成功',
+              type: 'success'
+            });
+          })
         } else {
           console.log("error submit!!");
           return false;
@@ -169,6 +294,7 @@ export default {
   height: 100%;
   background-color: #ccc;
 }
+
 .login-main {
   width: 400px;
   position: absolute;
@@ -187,6 +313,6 @@ export default {
 .loginTitle {
   margin: 10px auto 30px auto;
   text-align: center;
-  color: 8a8a8a;
+  color: #8a8a8a;
 }
 </style>

@@ -3,7 +3,9 @@ package com.h.system.service;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.h.common.core.domain.AjaxResult;
 import com.h.common.core.domain.entity.SysUser;
+import com.h.common.core.domain.model.RegisterBody;
 
 /**
  * 用户 业务层
@@ -220,5 +222,13 @@ public interface ISysUserService extends IService<SysUser>
      * @return 用户信息集合信息
      */
     List<SysUser> selectUserListCommon(SysUser user);
+
+    /**
+     * 获取邮箱验证码
+     * @param email
+     * @return
+     */
+    AjaxResult sendCode(String email);
+
 
 }

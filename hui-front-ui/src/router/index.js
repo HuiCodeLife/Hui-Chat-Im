@@ -9,6 +9,7 @@ import ChatList from "../views/chatlist/ChatList";
 import ChatFriends from "../views/chatfriends/ChatFriends";
 import { Message } from 'element-ui'
 
+
 const router = new VueRouter({
   routes: [
     {
@@ -16,6 +17,7 @@ const router = new VueRouter({
       path: "/login",
       component: Login,
     },
+
     {
       path: "/",
       component: Layout,
