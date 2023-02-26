@@ -77,11 +77,6 @@ public class ChatUserController extends BaseController {
     public AjaxResult addUserByUserId(@PathVariable("acceptUserId") Long acceptUserId) {
         Long userId = SecurityUtils.getUserId();
 //        // TODO 重复请求处理
-//        ChatFriendsRequest chatFriendsRequest = chatFriendsRequestService.selectChatFriendsRequestBySendUserIdAndAcceptUserId(userId, acceptUserId);
-//        if (chatFriendsRequest != null && FriendRequestConstants.REQUEST_UNDO.equals(chatFriendsRequest.getStatus())) {
-//            // 存在未处理的相同的好友请求
-//            return AjaxResult.success("重复请求");
-//        }
         chatFriendsRequestService.addChatFriendsRequest(userId, acceptUserId);
         SysUser acceptUser = userService.selectUserById(acceptUserId);
         if (acceptUser == null) {
