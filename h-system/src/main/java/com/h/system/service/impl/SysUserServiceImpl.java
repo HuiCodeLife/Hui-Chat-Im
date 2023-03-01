@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import javax.validation.Validator;
 
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.extra.mail.MailUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.h.common.core.domain.AjaxResult;
 import com.h.common.utils.RegexUtils;
@@ -580,6 +582,12 @@ public class SysUserServiceImpl  extends ServiceImpl<SysUserMapper, SysUser> imp
             return AjaxResult.error("邮箱格式错误！");
         }
 
+//        SysUser user = getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getEmail, email));
+//        SysU this.selectUserByEmail(email);
+        SysUser user = userMapper.selectUserByEmail(email);
+        if (user != null) {
+            throw new RuntimeException("该邮箱已被注册");
+        }
         // 3.符合，生成验证码
         String code = RandomUtil.randomNumbers(6);
 
@@ -587,6 +595,8 @@ public class SysUserServiceImpl  extends ServiceImpl<SysUserMapper, SysUser> imp
         stringRedisTemplate.opsForValue().set(REGISTER_CODE_KEY + email, code, REGISTER_CODE_TTL, TimeUnit.MINUTES);
 
         // 5.发送验证码
+        MailUtil.send(email, "注册账号", "验证码【"+ code+"】,邮件来自Chat平台测试，非本人请忽略", false);
+
         log.debug("发送验证码成功，验证码：{}", code);
 
         return AjaxResult.success();

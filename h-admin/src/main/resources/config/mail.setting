@@ -1,0 +1,4 @@
+from = 你的邮箱地址
+pass = 邮箱发送密码
+host = smtp.qq.com
+user = 邮箱名

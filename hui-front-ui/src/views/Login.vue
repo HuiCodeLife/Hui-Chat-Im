@@ -254,6 +254,12 @@ export default {
           .then(() => {
             this.$router.push({path: this.redirect || "/"}).catch(() => {
             });
+            this.$notify({
+              title: '欢迎',
+              message: '欢迎回来！',
+              position: 'top-left',
+              type: 'success'
+            });
           })
           .catch(() => {
             this.loading = false;

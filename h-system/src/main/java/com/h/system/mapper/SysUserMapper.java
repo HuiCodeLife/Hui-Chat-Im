@@ -45,6 +45,16 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      */
     public SysUser selectUserByUserName(String userName);
 
+
+    /**
+     * 通过email查询用户
+     *
+     * @param email 邮箱
+     * @return 用户对象信息
+     */
+
+    public SysUser selectUserByEmail(String email);
+
     /**
      * 通过用户ID查询用户
      *
